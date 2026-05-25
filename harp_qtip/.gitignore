@@ -1,0 +1,17 @@
+*.pt
+*~
+*.safetensors
+*.err
+*.out
+*.json
+__pycache__/
+#*
+slurm_out/
+ckpt/
+log/
+hf/
+hess/
+fast-hadamard-transform/build/
+fast-hadamard-transform/dist/
+report*.nsys-rep
+report*.sqlite

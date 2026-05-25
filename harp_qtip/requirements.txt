@@ -1,0 +1,10 @@
+accelerate==0.34.2
+datasets==2.20.0
+glog==0.3.1
+huggingface_hub==0.24.0
+lm_eval==0.4.4
+numpy==2.1.2
+scipy==1.14.1
+setuptools==69.5.1
+tqdm==4.66.4
+transformers==4.45.2
