@@ -1,17 +1,42 @@
 # HARP: Hadamard-Preconditioned Adaptive Rotations for Extreme LLM Quantization
 
-This repository contains two backend integrations of **HARP** (Hadamard-Preconditioned Adaptive Rotations), a learnable structured orthogonal incoherence processor fit on calibration data.
+<p align="center">
+  <a href="https://arxiv.org/abs/2605.29843">
+    <img src="https://img.shields.io/badge/arXiv-2605.29843-b31b1b.svg">
+  </a>
+</p>
 
-HARP is designed to replace a fixed randomized Hadamard mixing stage with a learned orthogonal processor while keeping the downstream quantization backend unchanged. The repository is organized as a two-backend monorepo:
+<p align="center">
+  <b>Learnable orthogonal preprocessing for extreme LLM quantization</b>
+</p>
 
-- `harp_quip/`: QuIP# integrated with HARP.
-- `harp_qtip/`: QTIP integrated with HARP.
+> **TL;DR**
+>
+> HARP replaces the fixed randomized Hadamard transform used in SOTA PTQ pipelines with a learnable structured orthogonal processor trained only on calibration data. It improves quantization quality while preserving the original quantizer, deployment pipeline, and inference efficiency.
 
-Both integrations share the same high-level idea: set the backend's incoherence processor to `harp` instead of the original fixed Hadamard/RHT processor, fit HARP during calibration, and then export/evaluate the resulting quantized model using the backend's usual flow.
+## What is HARP?
+
+Modern ultra-low-bit quantization methods such as QuIP# rely on randomized orthogonal transforms (typically Randomized Hadamard Transforms, RHT) to improve weight incoherence before quantization.
+
+HARP asks a simple question:
+
+> **Can the incoherence processor itself be learned instead of fixed?**
+
+To answer this, **HARP** (Hadamard-Preconditioned Adaptive Rotations) introduces a structured orthogonal processor that:
+
+* starts from a Hadamard-style initialization,
+* remains computationally efficient,
+* is trained only during calibration,
+* requires **no model retraining**,
+* can be integrated into existing PTQ pipelines with minimal changes.
+
+The resulting processor better adapts to the statistics of each layer, reducing quantization error while preserving the original backend workflow.
 
 ---
 
 ## Repository layout
+
+The repository is organized as a two-backend monorepo:
 
 ```text
 .
@@ -19,7 +44,7 @@ Both integrations share the same high-level idea: set the backend's incoherence 
 └── harp_qtip/   # QTIP + HARP
 ```
 
-Each subdirectory is a self-contained fork of the corresponding upstream codebase. Install and run each backend from inside its own folder.
+Both integrations share the same high-level idea: set the backend's incoherence processor to `harp` instead of the original fixed Hadamard/RHT processor, fit HARP during calibration, and then export/evaluate the resulting quantized model using the backend's usual flow. Each subdirectory is a self-contained fork of the corresponding upstream codebase. Install and run each backend from inside its own folder.
 
 ---
 
@@ -86,6 +111,24 @@ HARP is fit during calibration. This adds a one-time quantization cost but does 
 
 Calibration cost differs by backend. QuIP# + HARP is the primary integration used for the main experiments. QTIP + HARP is currently a portability integration and can be slower because QTIP's trellis-coded quantization target is more expensive to refresh during HARP fitting.
 
+---
+
+## Citation
+
+If you use HARP in your research, please cite:
+
+```bibtex
+
+@article{zagitov2026harp,
+  title={HARP: Hadamard-Preconditioned Adaptive Rotation Processor for Extreme LLM Quantization}, 
+  author={Artur Zagitov and Gleb Molodtsov and Aleksandr Beznosikov},
+  year={2026},
+  eprint={2605.29843},
+  archivePrefix={arXiv},
+  primaryClass={cs.LG},
+  url={https://arxiv.org/abs/2605.29843}, 
+}
+```
 ---
 
 ## Licenses and model terms
